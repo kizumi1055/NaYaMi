@@ -5,276 +5,346 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>食べログ風 評価ページ</title>
     <style>
-        body {
-            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
-            background-color: #f2f2f2;
-            color: #333;
-            margin: 0;
-            padding: 20px;
+        * {
+            box-sizing: border-box;
         }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background-color: #fff;
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", sans-serif;
+            background-color: #f4f5f6;
+            color: #2d3130;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
         }
         
-        /* Store Signboard Image */
+        /* 移动端主容器（限制最大宽度，在任何设备上看都是完美的手机界面） */
+        .phone-container {
+            width: 100%;
+            max-width: 480px;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* 店铺招牌大图 */
         .shop-signboard {
             width: 100%;
-            height: 280px;
+            height: 220px;
             object-fit: cover;
-            background-color: #ccc;
-            background-image: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1000&auto=format&fit=crop');
+            display: block;
         }
 
-        /* Tabs */
+        /* 极简高级感导航栏 */
         .tabs {
             display: flex;
-            background-color: #f8f8f8;
-            border-bottom: 2px solid #a47e5b;
+            background-color: #fff;
+            border-bottom: 1px solid #eef0f2;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none; /* Firefox */
+        }
+        .tabs::-webkit-scrollbar {
+            display: none; /* Safari and Chrome */
         }
         .tab {
-            flex: 1;
-            text-align: center;
-            padding: 15px 0;
-            font-size: 14px;
-            font-weight: bold;
-            color: #555;
+            padding: 14px 20px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #7a828a;
             cursor: pointer;
-            border-right: 1px solid #ddd;
+            position: relative;
+            flex-shrink: 0;
         }
         .tab.active {
-            background-color: #a47e5b;
-            color: #fff;
+            color: #b38953;
+            font-weight: 600;
+        }
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20px;
+            right: 20px;
+            height: 3px;
+            background-color: #b38953;
+            border-radius: 2px;
         }
         
+        /* 主体内容区域堆叠布局 */
         .content-wrapper {
+            padding: 16px;
             display: flex;
-            padding: 20px;
-            gap: 30px;
+            flex-direction: column;
+            gap: 20px;
         }
         
-        /* Left Main Content */
-        .main-content {
-            flex: 1;
-        }
         .review-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            font-size: 13px;
+            font-size: 12px;
+            color: #8a9299;
+            padding: 0 4px;
         }
-        .review-card {
-            border-bottom: 1px dashed #ccc;
-            padding-bottom: 20px;
-            margin-bottom: 20px;
+        .review-header select {
+            border: 1px solid #e2e5e8;
+            border-radius: 6px;
+            padding: 4px 8px;
+            color: #5a626a;
+            outline: none;
+            background: #fff;
         }
+
+        /* 现代圆角高光卡片 */
+        .card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0,0,0,0.015);
+        }
+        
+        /* 用户评论卡片内部 */
         .reviewer-info {
             display: flex;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
         .avatar {
-            width: 40px;
-            height: 40px;
-            background-color: #ccc;
-            border-radius: 5px;
-            margin-right: 10px;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%; /* 圆形头像更现代 */
+            margin-right: 12px;
             background-size: cover;
+            border: 1px solid #eee;
         }
         .reviewer-name {
-            font-weight: bold;
-            color: #0066cc;
+            font-weight: 600;
+            color: #1a1a1a;
             font-size: 14px;
+            margin-bottom: 2px;
         }
         .reviewer-stats {
-            font-size: 12px;
-            color: #666;
+            font-size: 11px;
+            color: #929aa2;
         }
         .rating-row {
             display: flex;
             align-items: center;
-            font-size: 14px;
             margin-bottom: 10px;
+            background: #fffcf5;
+            padding: 6px 10px;
+            border-radius: 8px;
+            width: fit-content;
         }
         .stars {
-            color: #e65100;
-            font-size: 16px;
-            margin-right: 5px;
+            color: #ff9800;
+            font-size: 13px;
+            margin-right: 6px;
+            letter-spacing: -1px;
         }
         .score {
-            color: #e65100;
-            font-weight: bold;
-            font-size: 18px;
-            margin-right: 15px;
+            color: #ff9800;
+            font-weight: 700;
+            font-size: 15px;
+            margin-right: 12px;
         }
         .price {
-            color: #666;
-            font-size: 13px;
+            color: #6a727a;
+            font-size: 11px;
         }
         .visit-date {
-            font-size: 12px;
-            color: #666;
+            font-size: 11px;
+            color: #a2aab2;
             margin-bottom: 10px;
+            display: flex;
+            gap: 8px;
         }
         .review-text {
-            font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 10px;
+            font-size: 13.5px;
+            line-height: 1.7;
+            color: #333639;
+            margin-bottom: 12px;
+            text-align: justify;
         }
         .see-more {
-            color: #0066cc;
-            font-size: 13px;
+            color: #b38953;
+            font-size: 12px;
+            font-weight: 500;
             cursor: pointer;
-            margin-bottom: 15px;
+            margin-bottom: 14px;
             display: inline-block;
         }
         .review-image {
-            width: 150px;
-            height: 150px;
+            width: 100%;
+            max-width: 200px;
+            height: 140px;
             object-fit: cover;
-            border-radius: 4px;
-            margin-bottom: 15px;
-            background-color: #ddd;
-            background-size: cover;
+            border-radius: 10px;
+            margin-bottom: 14px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
         }
+        
+        /* 卡片底部操作按钮 */
         .action-buttons {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-start;
+            gap: 12px;
+            border-top: 1px solid #f6f8f9;
+            padding-top: 14px;
         }
         .btn-like {
-            background-color: #f7941d;
-            color: white;
+            background-color: #fff1eb;
+            color: #ff6b35;
             border: none;
-            padding: 5px 15px;
-            border-radius: 3px;
+            padding: 7px 16px;
+            border-radius: 20px;
             cursor: pointer;
-            font-weight: bold;
-        }
-        .btn-save {
-            background-color: white;
-            border: 1px solid #ccc;
-            padding: 5px 15px;
-            border-radius: 3px;
-            cursor: pointer;
-            color: #333;
-        }
-
-        /* Right Sidebar (Reservation) */
-        .sidebar {
-            width: 320px;
-        }
-        .phone-box {
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 15px;
+            font-size: 12px;
+            font-weight: 600;
             display: flex;
             align-items: center;
+            gap: 4px;
         }
-        .reservation-box {
-            border: 1px solid #e0e0e0;
-            background-color: #fafafa;
+        .btn-save {
+            background-color: #f4f5f6;
+            border: none;
+            padding: 7px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            color: #5a626a;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* 预订区域（在手机端自然顺延往下，符合浏览习惯） */
+        .phone-box {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            padding: 0 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
         .res-header {
-            background-color: #333;
-            color: white;
-            padding: 10px;
-            font-weight: bold;
+            border-bottom: 1px solid #f0f2f5;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+            font-weight: 600;
+            font-size: 14px;
             display: flex;
             justify-content: space-between;
-        }
-        .res-body {
-            padding: 15px;
+            align-items: center;
         }
         .date-select {
             display: flex;
             justify-content: space-between;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 10px;
-            margin-bottom: 10px;
-            font-size: 14px;
+            background: #f8f9fa;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 13px;
         }
         .calendar-table {
             width: 100%;
             text-align: center;
-            border-collapse: collapse;
-            font-size: 13px;
-            margin-bottom: 15px;
+            border-collapse: separate;
+            border-spacing: 4px;
+            font-size: 11px;
+            margin-bottom: 16px;
         }
         .calendar-table th {
-            font-weight: normal;
-            color: #666;
-            padding: 5px 0;
+            font-weight: 600;
+            color: #929aa2;
+            padding: 6px 0;
+            font-size: 11px;
         }
         .calendar-table td {
-            padding: 5px 0;
+            padding: 8px 0;
             color: #333;
+            border-radius: 8px;
+            vertical-align: middle;
         }
-        .calendar-table .sun { color: red; }
-        .calendar-table .sat { color: blue; }
+        .calendar-table .sun { color: #ff4d4f; }
+        .calendar-table .sat { color: #1890ff; }
+        
         .circle-o {
-            color: #e65100;
+            color: #ff6b35;
             font-weight: bold;
+            font-size: 10px;
+            display: block;
+            margin-top: 2px;
         }
         .selected-date {
-            background-color: #fff9e6;
-            border: 1px solid #f7941d;
+            background-color: #ff6b35 !important;
+            color: #fff !important;
+        }
+        .selected-date .circle-o {
+            color: #fff !important;
         }
         .dropdown-row {
             display: flex;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             align-items: center;
-            font-size: 14px;
+            font-size: 13px;
         }
         .dropdown-row label {
             width: 50px;
+            color: #6a727a;
         }
         .dropdown-row select {
             flex: 1;
-            padding: 5px;
-            border: 1px solid #ccc;
+            padding: 8px 12px;
+            border: 1px solid #e2e5e8;
+            border-radius: 8px;
+            background: #fff;
+            outline: none;
+            color: #333;
         }
         .btn-reserve {
             width: 100%;
-            background-color: #f7941d;
+            background: linear-gradient(135deg, #ff8c42, #ff6b35);
             color: white;
             border: none;
-            padding: 15px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 3px;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 10px;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 14px;
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.2);
         }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="phone-container">
     <img src="https://i.ibb.co/tTVtmCNQ/image.jpg" class="shop-signboard" alt="店舗看板">
 
     <div class="tabs">
         <div class="tab">トップ</div>
         <div class="tab">座席</div>
-        <div class="tab">メニュー・コース</div>
+        <div class="tab">メニュー</div>
         <div class="tab">写真 (296)</div>
         <div class="tab active">口コミ (61)</div>
-        <div class="tab">クーポン・地図</div>
+        <div class="tab">地図</div>
     </div>
 
     <div class="content-wrapper">
-        <div class="main-content">
+        
+        <div>
             <div class="review-header">
                 <div>1〜20 件を表示 / 全 61 件</div>
-                <div>表示件数： <select><option>20</option></select> 件</div>
+                <div>表示件数： <select><option>20</option></select></div>
             </div>
+            <div style="height: 12px;"></div>
 
-            <div class="review-card">
+            <div class="card" style="margin-bottom: 14px;">
                 <div class="reviewer-info">
                     <div class="avatar" style="background-image: url('https://picsum.photos/40');"></div>
                     <div>
@@ -287,10 +357,13 @@
                     <span class="stars">★★★★★</span>
                     <span class="score">4.5</span>
                     <span class="price">￥1,000～￥1,999 / 1人</span>
-                    <span style="margin-left: 10px; color: #0066cc; font-size: 12px;">詳細</span>
                 </div>
 
-                <div class="visit-date">2026/06訪問 | 2回目</div>
+                <div class="visit-date">
+                    <span>2026/06訪問</span>
+                    <span style="color:#eef0f2;">|</span>
+                    <span>2回目</span>
+                </div>
 
                 <div class="review-text">
                     先日、とびっこのぴょんぴょんまきをいただきました。食べた次の日からダンスが上手に踊れるようになってみんなの足を引っ張ることもなくなりました。また行きたいです！
@@ -307,7 +380,7 @@
                 </div>
             </div>
 
-            <div class="review-card">
+            <div class="card">
                 <div class="reviewer-info">
                     <div class="avatar" style="background-image: url('https://picsum.photos/45');"></div>
                     <div>
@@ -320,10 +393,13 @@
                     <span class="stars">★★★★☆</span>
                     <span class="score">3.8</span>
                     <span class="price">￥2,000～￥2,999 / 1人</span>
-                    <span style="margin-left: 10px; color: #0066cc; font-size: 12px;">詳細</span>
                 </div>
 
-                <div class="visit-date">2026/06訪問 | 初めて</div>
+                <div class="visit-date">
+                    <span>2026/06訪問</span>
+                    <span style="color:#eef0f2;">|</span>
+                    <span>初めて</span>
+                </div>
 
                 <div class="review-text">
                     超音波鯨寿司を食べたら高音が出るようになりました！でも高音しか出なくなった
@@ -340,62 +416,86 @@
                 </div>
             </div>
 
-            <div style="text-align: right; margin-top:10px; font-size: 12px; color: #0066cc;">
+            <div style="text-align: right; margin-top:14px; font-size: 12px; color: #b38953; font-weight: 500;">
                 ▶ 口コミをすべて見る
             </div>
         </div>
 
-        <div class="sidebar">
+        <div>
             <div class="phone-box">
-                📞 050-5600-4738
+                <span>📞</span> 050-5600-4738
             </div>
             
-            <div class="reservation-box">
+            <div class="card">
                 <div class="res-header">
                     <span>ネット予約</span>
-                    <span style="font-size: 12px;">ⓟ 貯まる・使える</span>
+                    <span style="font-size: 11px; color:#ff6b35; background:#fff2ec; padding:2px 6px; border-radius:4px;">ⓟ 貯まる・使える</span>
                 </div>
-                <div class="res-body">
-                    <div class="date-select">
-                        <span>来店日</span>
-                        <strong>6月12日 (金)</strong>
-                    </div>
-
-                    <div style="text-align: center; margin-bottom: 10px; font-weight: bold; font-size: 14px;">
-                        &lt; 2026年 6月 &gt;
-                    </div>
-
-                    <table class="calendar-table">
-                        <tr>
-                            <th class="sun">日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th class="sat">土</th>
-                        </tr>
-                        <tr>
-                            <td style="color:#ccc;">31</td><td>1<br><span style="color:#eee">-</span></td><td>2<br><span style="color:#eee">-</span></td><td>3<br><span style="color:#eee">-</span></td><td>4<br><span style="color:#eee">-</span></td><td>5<br><span style="color:#eee">-</span></td><td class="sat">6<br><span style="color:#eee">-</span></td>
-                        </tr>
-                        <tr>
-                            <td class="sun">7<br><span class="circle-o">〇</span></td><td>8<br><span class="circle-o">〇</span></td><td>9<br><span class="circle-o">〇</span></td><td>10<br><span class="circle-o">〇</span></td><td>11<br><span class="circle-o">〇</span></td><td class="selected-date">12<br><span class="circle-o">〇</span></td><td class="sat">13<br><span class="circle-o">〇</span></td>
-                        </tr>
-                        <tr>
-                            <td class="sun">14<br><span class="circle-o">〇</span></td><td>15<br><span class="circle-o">〇</span></td><td>16<br><span class="circle-o">〇</span></td><td>17<br><span class="circle-o">〇</span></td><td>18<br><span class="circle-o">〇</span></td><td>19<br><span class="circle-o">〇</span></td><td class="sat">20<br><span class="circle-o">〇</span></td>
-                        </tr>
-                        <tr>
-                            <td class="sun">21<br><span class="circle-o">〇</span></td><td>22<br><span class="circle-o">〇</span></td><td>23<br><span class="circle-o">〇</span></td><td>24<br><span class="circle-o">〇</span></td><td>25<br><span class="circle-o">〇</span></td><td>26<br><span class="circle-o">〇</span></td><td class="sat">27<br><span class="circle-o">〇</span></td>
-                        </tr>
-                    </table>
-
-                    <div class="dropdown-row">
-                        <label>人数</label>
-                        <select><option>2名</option></select>
-                    </div>
-                    <div class="dropdown-row">
-                        <label>時間</label>
-                        <select><option>19:00</option></select>
-                    </div>
-
-                    <button class="btn-reserve">予約する</button>
+                
+                <div class="date-select">
+                    <span style="color:#7a828a;">来店日</span>
+                    <strong style="color:#1a1a1a;">6月12日 (金)</strong>
                 </div>
+
+                <div style="text-align: center; margin-bottom: 12px; font-weight: 600; font-size: 13px; color:#333;">
+                    &lt; 2026年 6月 &gt;
+                </div>
+
+                <table class="calendar-table">
+                    <tr>
+                        <th class="sun">日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th class="sat">土</th>
+                    </tr>
+                    <tr>
+                        <td style="color:#ccc;">31</td>
+                        <td style="color:#ddd;">1<br><span style="color:transparent">-</span></td>
+                        <td style="color:#ddd;">2<br><span style="color:transparent">-</span></td>
+                        <td style="color:#ddd;">3<br><span style="color:transparent">-</span></td>
+                        <td style="color:#ddd;">4<br><span style="color:transparent">-</span></td>
+                        <td style="color:#ddd;">5<br><span style="color:transparent">-</span></td>
+                        <td class="sat" style="color:#bbb;">6<br><span style="color:transparent">-</span></td>
+                    </tr>
+                    <tr>
+                        <td class="sun">7<br><span class="circle-o">〇</span></td>
+                        <td>8<br><span class="circle-o">〇</span></td>
+                        <td>9<br><span class="circle-o">〇</span></td>
+                        <td>10<br><span class="circle-o">〇</span></td>
+                        <td>11<br><span class="circle-o">〇</span></td>
+                        <td class="selected-date">12<br><span class="circle-o">〇</span></td>
+                        <td class="sat">13<br><span class="circle-o">〇</span></td>
+                    </tr>
+                    <tr>
+                        <td class="sun">14<br><span class="circle-o">〇</span></td>
+                        <td>15<br><span class="circle-o">〇</span></td>
+                        <td>16<br><span class="circle-o">〇</span></td>
+                        <td>17<br><span class="circle-o">〇</span></td>
+                        <td>18<br><span class="circle-o">〇</span></td>
+                        <td>19<br><span class="circle-o">〇</span></td>
+                        <td class="sat">20<br><span class="circle-o">〇</span></td>
+                    </tr>
+                    <tr>
+                        <td class="sun">21<br><span class="circle-o">〇</span></td>
+                        <td>22<br><span class="circle-o">〇</span></td>
+                        <td>23<br><span class="circle-o">〇</span></td>
+                        <td>24<br><span class="circle-o">〇</span></td>
+                        <td>25<br><span class="circle-o">〇</span></td>
+                        <td>26<br><span class="circle-o">〇</span></td>
+                        <td class="sat">27<br><span class="circle-o">〇</span></td>
+                    </tr>
+                </table>
+
+                <div class="dropdown-row">
+                    <label>人数</label>
+                    <select><option>2名</option></select>
+                </div>
+                <div class="dropdown-row">
+                    <label>时间</label>
+                    <select><option>19:00</option></select>
+                </div>
+
+                <button class="btn-reserve">予約する</button>
             </div>
         </div>
+        
     </div>
 </div>
 
