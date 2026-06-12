@@ -18,6 +18,16 @@
             background-color: #fff;
             box-shadow: 0 0 5px rgba(0,0,0,0.1);
         }
+        
+        /* Store Signboard Image */
+        .shop-signboard {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            background-color: #ccc;
+            background-image: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1000&auto=format&fit=crop');
+        }
+
         /* Tabs */
         .tabs {
             display: flex;
@@ -61,6 +71,7 @@
         .review-card {
             border-bottom: 1px dashed #ccc;
             padding-bottom: 20px;
+            margin-bottom: 20px;
         }
         .reviewer-info {
             display: flex;
@@ -73,7 +84,6 @@
             background-color: #ccc;
             border-radius: 5px;
             margin-right: 10px;
-            background-image: url('https://picsum.photos/40');
             background-size: cover;
         }
         .reviewer-name {
@@ -117,242 +127,4 @@
             margin-bottom: 10px;
         }
         .see-more {
-            color: #0066cc;
-            font-size: 13px;
-            cursor: pointer;
-            margin-bottom: 15px;
-            display: inline-block;
-        }
-        .review-image {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 4px;
-            margin-bottom: 15px;
-            /* Placeholder for the food image */
-            background-color: #ddd;
-            background-image: url('https://picsum.photos/150');
-        }
-        .action-buttons {
-            display: flex;
-            justify-content: space-between;
-        }
-        .btn-like {
-            background-color: #f7941d;
-            color: white;
-            border: none;
-            padding: 5px 15px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .btn-save {
-            background-color: white;
-            border: 1px solid #ccc;
-            padding: 5px 15px;
-            border-radius: 3px;
-            cursor: pointer;
-            color: #333;
-        }
-
-        /* Right Sidebar (Reservation) */
-        .sidebar {
-            width: 320px;
-        }
-        .phone-box {
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-        }
-        .reservation-box {
-            border: 1px solid #e0e0e0;
-            background-color: #fafafa;
-        }
-        .res-header {
-            background-color: #333;
-            color: white;
-            padding: 10px;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-        }
-        .res-body {
-            padding: 15px;
-        }
-        .date-select {
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 10px;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-        .calendar-table {
-            width: 100%;
-            text-align: center;
-            border-collapse: collapse;
-            font-size: 13px;
-            margin-bottom: 15px;
-        }
-        .calendar-table th {
-            font-weight: normal;
-            color: #666;
-            padding: 5px 0;
-        }
-        .calendar-table td {
-            padding: 5px 0;
-            color: #333;
-        }
-        .calendar-table .sun { color: red; }
-        .calendar-table .sat { color: blue; }
-        .circle-o {
-            color: #e65100;
-            font-weight: bold;
-        }
-        .selected-date {
-            background-color: #fff9e6;
-            border: 1px solid #f7941d;
-        }
-        .dropdown-row {
-            display: flex;
-            margin-bottom: 10px;
-            align-items: center;
-            font-size: 14px;
-        }
-        .dropdown-row label {
-            width: 50px;
-        }
-        .dropdown-row select {
-            flex: 1;
-            padding: 5px;
-            border: 1px solid #ccc;
-        }
-        .btn-reserve {
-            width: 100%;
-            background-color: #f7941d;
-            color: white;
-            border: none;
-            padding: 15px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 3px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <div class="tabs">
-        <div class="tab">トップ</div>
-        <div class="tab">座席</div>
-        <div class="tab">メニュー・コース</div>
-        <div class="tab">写真 (26)</div>
-        <div class="tab active">口コミ (61)</div>
-        <div class="tab">クーポン・地図</div>
-    </div>
-
-    <div class="content-wrapper">
-        <div class="main-content">
-            <div class="review-header">
-                <div>1〜20 件を表示 / 全 90 件</div>
-                <div>表示件数： <select><option>20</option></select> 件</div>
-            </div>
-
-            <div class="review-card">
-                <div class="reviewer-info">
-                    <div class="avatar"></div>
-                    <div>
-                        <div class="reviewer-name">yagimeshi</div>
-                        <div class="reviewer-stats">口コミ96件 | フォロワー33人</div>
-                    </div>
-                </div>
-                
-                <div class="rating-row">
-                    <span class="stars">★★★★★</span>
-                    <span class="score">3.5</span>
-                    <span class="price">￥1,000～￥1,999 / 1人</span>
-                    <span style="margin-left: 10px; color: #0066cc; font-size: 12px;">詳細</span>
-                </div>
-
-                <div class="visit-date">2026/06訪問 | 2回目</div>
-
-                <div class="review-text">
-                    先日、とびっこのぴょんぴょんまきをいただきました。食べた次の日からダンスが上手に踊れるようになってみんなの足を引っ張ることもなくなりました。また行きたいです！
-                </div>
-                <div class="see-more">もっと見る ∨</div>
-
-                <div>
-                    <img src="https://images.unsplash.com/photo-1541696432-82c6da8ce7bf?q=80&w=300&auto=format&fit=crop" class="review-image" alt="Food">
-                </div>
-
-                <div class="action-buttons">
-                    <button class="btn-like">❤ いいね！ 11</button>
-                    <button class="btn-save">☖ お店を保存</button>
-                </div>
-            </div>
-            <div style="text-align: right; margin-top:10px; font-size: 12px; color: #0066cc;">
-                ▶ 口コミをすべて見る
-            </div>
-        </div>
-
-        <div class="sidebar">
-            <div class="phone-box">
-                📞 050-5600-4738
-            </div>
-            
-            <div class="reservation-box">
-                <div class="res-header">
-                    <span>ネット予約</span>
-                    <span style="font-size: 12px;">ⓟ 貯まる・使える</span>
-                </div>
-                <div class="res-body">
-                    <div class="date-select">
-                        <span>来店日</span>
-                        <strong>6月12日 (金)</strong>
-                    </div>
-
-                    <div style="text-align: center; margin-bottom: 10px; font-weight: bold; font-size: 14px;">
-                        &lt; 2026年 6月 &gt;
-                    </div>
-
-                    <table class="calendar-table">
-                        <tr>
-                            <th class="sun">日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th class="sat">土</th>
-                        </tr>
-                        <tr>
-                            <td style="color:#ccc;">31</td><td>1<br><span style="color:#eee">-</span></td><td>2<br><span style="color:#eee">-</span></td><td>3<br><span style="color:#eee">-</span></td><td>4<br><span style="color:#eee">-</span></td><td>5<br><span style="color:#eee">-</span></td><td class="sat">6<br><span style="color:#eee">-</span></td>
-                        </tr>
-                        <tr>
-                            <td class="sun">7<br><span class="circle-o">〇</span></td><td>8<br><span class="circle-o">〇</span></td><td>9<br><span class="circle-o">〇</span></td><td>10<br><span class="circle-o">〇</span></td><td>11<br><span class="circle-o">〇</span></td><td class="selected-date">12<br><span class="circle-o">〇</span></td><td class="sat">13<br><span class="circle-o">〇</span></td>
-                        </tr>
-                        <tr>
-                            <td class="sun">14<br><span class="circle-o">〇</span></td><td>15<br><span class="circle-o">〇</span></td><td>16<br><span class="circle-o">〇</span></td><td>17<br><span class="circle-o">〇</span></td><td>18<br><span class="circle-o">〇</span></td><td>19<br><span class="circle-o">〇</span></td><td class="sat">20<br><span class="circle-o">〇</span></td>
-                        </tr>
-                        <tr>
-                            <td class="sun">21<br><span class="circle-o">〇</span></td><td>22<br><span class="circle-o">〇</span></td><td>23<br><span class="circle-o">〇</span></td><td>24<br><span class="circle-o">〇</span></td><td>25<br><span class="circle-o">〇</span></td><td>26<br><span class="circle-o">〇</span></td><td class="sat">27<br><span class="circle-o">〇</span></td>
-                        </tr>
-                    </table>
-
-                    <div class="dropdown-row">
-                        <label>人数</label>
-                        <select><option>2名</option></select>
-                    </div>
-                    <div class="dropdown-row">
-                        <label>時間</label>
-                        <select><option>19:00</option></select>
-                    </div>
-
-                    <button class="btn-reserve">予約する</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-</body>
-</html>
+            color:
